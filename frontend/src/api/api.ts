@@ -3,7 +3,7 @@ import type { FetchArgs } from "@reduxjs/toolkit/query";
 import { useAuthStore } from "../store/authStore";
 
 // const baseUrl = "http://localhost:5000/api";
-const baseUrl = "http://solo-sparks-three.vercel.app/api";
+const baseUrl = "https://solo-sparks-three.vercel.app/api";
 
 const customBaseQuery = async (
   args: string | FetchArgs,

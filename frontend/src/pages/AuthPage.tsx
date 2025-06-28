@@ -6,7 +6,7 @@ import { LoginForm } from "../components/LoginForm";
 import { RegisterForm } from "../components/RegisterForm";
 import type { LoginCredentials, RegisterCredentials } from "../types";
 import { useNavigate } from "react-router-dom";
-import authIllustration from "../assets/Mystic Mountain at Dawn.png";
+import authIllustration from "../assets/Mystic Mountain at Dawn.jpg";
 
 export const AuthPage = () => {
   const [mode, setMode] = useState<"login" | "register">("login");
@@ -108,6 +108,13 @@ export const AuthPage = () => {
             src={authIllustration}
             alt="Authentication illustration"
             className="w-3/4 max-w-lg h-auto object-cover hidden md:block"
+            loading="lazy"
+            decoding="async"
+            style={{
+              willChange: "transform",
+              transform: "translateZ(0)",
+              backfaceVisibility: "hidden",
+            }}
           />
         </div>
       </div>
