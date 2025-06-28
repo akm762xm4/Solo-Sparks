@@ -14,7 +14,7 @@ interface AuthState {
 }
 
 export const useAuthStore = create(
-  persist<AuthState>(
+  persist<AuthState, any, any, any>(
     (set) => ({
       user: null,
       token: null,
@@ -27,12 +27,11 @@ export const useAuthStore = create(
     }),
     {
       name: "auth-storage", // name of item in storage
-      partialize: (state) =>
-        ({
-          user: state.user,
-          token: state.token,
-          isAuthenticated: state.isAuthenticated,
-        } as Partial<AuthState>),
+      partialize: (state) => ({
+        user: state.user,
+        token: state.token,
+        isAuthenticated: state.isAuthenticated,
+      }),
     }
   )
 );
