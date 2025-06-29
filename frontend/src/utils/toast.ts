@@ -4,20 +4,28 @@ import { toast } from "../components/ui/CustomToaster";
 export { toast };
 
 // Convenience functions for common toast types
-export const showSuccess = (message: string) => {
-  toast.success(message);
+export const showSuccess = (message: string, description?: string) => {
+  toast.success(message, {
+    description,
+  });
 };
 
-export const showError = (message: string) => {
-  toast.error(message);
+export const showError = (message: string, description?: string) => {
+  toast.error(message, {
+    description,
+  });
 };
 
-export const showWarning = (message: string) => {
-  toast.warning(message);
+export const showWarning = (message: string, description?: string) => {
+  toast.warning(message, {
+    description,
+  });
 };
 
-export const showInfo = (message: string) => {
-  toast.info(message);
+export const showInfo = (message: string, description?: string) => {
+  toast.info(message, {
+    description,
+  });
 };
 
 // Special toast for quest completions
