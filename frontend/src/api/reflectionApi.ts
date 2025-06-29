@@ -23,7 +23,7 @@ export const reflectionApi = api.injectEndpoints({
     }),
     getReflections: builder.query<Reflection[], void>({
       query: () => "/reflections",
-      providesTags: ["Reflection"],
+      providesTags: ["Reflection", "Quest"],
       // You may want to add providesTags for cache invalidation
     }),
     deleteReflection: builder.mutation<any, string>({

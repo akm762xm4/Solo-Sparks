@@ -7,6 +7,7 @@ import { RegisterForm } from "../components/RegisterForm";
 import type { LoginCredentials, RegisterCredentials } from "../types";
 import { useNavigate } from "react-router-dom";
 import authIllustration from "../assets/Mystic Mountain at Dawn.jpg";
+import { toast } from "sonner";
 
 export const AuthPage = () => {
   const [mode, setMode] = useState<"login" | "register">("login");
@@ -20,6 +21,7 @@ export const AuthPage = () => {
       setError("");
       const response = await login(credentials).unwrap();
       navigate("/dashboard");
+      toast.success("Login successful, Welcome back!");
       setUser(response.data);
       if (response.token) {
         setToken(response.token);
@@ -34,6 +36,7 @@ export const AuthPage = () => {
       setError("");
       const response = await register(credentials).unwrap();
       navigate("/onboarding");
+      toast.success("Registration successful, Welcome to Solo-Spark!");
       setUser(response.data);
       if (response.token) {
         setToken(response.token);

@@ -19,6 +19,7 @@ import { Sidebar } from "./components/Sidebar";
 import { useEffect } from "react";
 import { useGetCurrentUserQuery } from "./api/authApi";
 import { ThemeProvider } from "./ThemeContext";
+import { CustomToaster } from "./components/ui/CustomToaster";
 
 function ProtectedLayout() {
   const { isAuthenticated } = useAuthStore();
@@ -44,6 +45,7 @@ function App() {
 
   return (
     <ThemeProvider>
+      <CustomToaster />
       <Router>
         <Routes>
           <Route path="/auth" element={<AuthPage />} />

@@ -28,6 +28,7 @@ import {
   FilterSkeleton,
 } from "../components/ui/Skeleton";
 import { Link } from "react-router-dom";
+import { toast } from "sonner";
 
 // Portal-based dropdown menu
 function PortalDropdown({
@@ -193,11 +194,12 @@ export const ReflectionsPage = () => {
     if (reflectionToDelete) {
       try {
         await deleteReflection(reflectionToDelete).unwrap();
+        toast.success("Reflection deleted successfully!");
         refetch();
         setShowDeleteModal(false);
         setReflectionToDelete(null);
       } catch (err) {
-        alert("Failed to delete reflection.");
+        toast.error("Failed to delete reflection.");
       }
     }
   };

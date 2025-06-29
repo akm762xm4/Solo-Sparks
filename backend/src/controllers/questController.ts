@@ -17,6 +17,84 @@ export const getTodayQuest = async (req: IAuthRequest, res: Response) => {
   }
 };
 
+export const startQuest = async (req: IAuthRequest, res: Response) => {
+  try {
+    const userId = req.user._id;
+    const { questId } = req.body;
+
+    // Validate questId
+    if (!questId) {
+      res.status(400).json({
+        success: false,
+        message: "Quest ID is required",
+      });
+    }
+
+    // Check if user has already started this quest today
+    const todayStart = new Date();
+    todayStart.setHours(0, 0, 0, 0);
+    const todayEnd = new Date();
+    todayEnd.setHours(23, 59, 59, 999);
+
+    const existingReflection = await Reflection.findOne({
+      user: userId,
+      questTitle: questId,
+      createdAt: {
+        $gte: todayStart,
+        $lte: todayEnd,
+      },
+    });
+
+    if (existingReflection) {
+      res.status(400).json({
+        success: false,
+        message: "Quest already started today",
+      });
+    }
+
+    // Get the quest details (in a real app, you'd fetch from a quest database)
+    const quest = await getPersonalizedQuest(userId);
+
+    // Create a reflection entry to mark quest as started
+    const reflection = new Reflection({
+      user: userId,
+      questTitle: quest.title,
+      questType: quest.type,
+      text: `Started quest: ${quest.title}`,
+      qualityScore: 0, // Will be updated when completed
+      createdAt: new Date(),
+    });
+
+    await reflection.save();
+
+    // Update user's quests assigned count
+    await User.findByIdAndUpdate(userId, { $inc: { questsAssigned: 1 } });
+
+    // Return the started quest data
+    const startedQuest = {
+      id: questId,
+      title: quest.title,
+      description: quest.description,
+      category: "emotional", // Default category
+      status: "active",
+      progress: 0,
+      difficulty: "easy",
+      reward: 50,
+      dueDate: todayEnd.toISOString(),
+      estimatedTime: "15 min",
+      type: quest.type,
+      suggestedBy: quest.suggestedBy,
+      createdAt: new Date().toISOString(),
+      completedAt: undefined,
+    };
+
+    res.json({ success: true, data: startedQuest });
+  } catch (error) {
+    console.error("Quest start error:", error);
+    res.status(500).json({ success: false, message: "Failed to start quest" });
+  }
+};
+
 export const getQuestHistory = async (req: IAuthRequest, res: Response) => {
   try {
     const userId = req.user._id;

@@ -5,12 +5,13 @@ export interface IUser extends Document {
   _id: mongoose.Types.ObjectId;
   name: string;
   email: string;
-  username: string;
   password: string;
   matchPassword(password: string): Promise<boolean>;
   sparkPoints: number;
   questsAssigned: number;
   questsCompleted: number;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 const userSchema = new Schema(
@@ -23,11 +24,6 @@ const userSchema = new Schema(
       type: String,
       required: true,
       unique: true,
-    },
-    username: {
-      type: String,
-      unique: true,
-      sparse: true,
     },
     password: {
       type: String,

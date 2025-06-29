@@ -36,5 +36,4 @@ Thumbs.db
 *.sw?
 
 # Misc
-uploads/
 coverage/ 

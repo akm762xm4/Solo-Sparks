@@ -32,6 +32,11 @@ export interface CompleteQuestRequest {
   reflectionText?: string;
 }
 
+// Quest start request
+export interface StartQuestRequest {
+  questId: string;
+}
+
 export const questApi = api.injectEndpoints({
   endpoints: (builder) => ({
     getTodayQuest: builder.query<
@@ -48,6 +53,19 @@ export const questApi = api.injectEndpoints({
       providesTags: ["Quest"],
     }),
 
+    // Start a quest
+    startQuest: builder.mutation<
+      { success: boolean; data: Quest },
+      StartQuestRequest
+    >({
+      query: (body) => ({
+        url: "/quests/start",
+        method: "POST",
+        body,
+      }),
+      invalidatesTags: ["Quest", "User"],
+    }),
+
     // Complete a quest
     completeQuest: builder.mutation<
       { success: boolean; data: Quest },
@@ -58,7 +76,7 @@ export const questApi = api.injectEndpoints({
         method: "POST",
         body,
       }),
-      invalidatesTags: ["Quest", "User"],
+      invalidatesTags: ["Quest", "User", "Reflection"],
     }),
 
     // Get current active quests
@@ -73,6 +91,7 @@ export const questApi = api.injectEndpoints({
 export const {
   useGetTodayQuestQuery,
   useGetQuestHistoryQuery,
+  useStartQuestMutation,
   useCompleteQuestMutation,
   useGetActiveQuestsQuery,
 } = questApi;

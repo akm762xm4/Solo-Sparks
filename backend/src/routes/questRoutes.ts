@@ -3,6 +3,7 @@ import {
   getTodayQuest,
   getQuestHistory,
   getActiveQuests,
+  startQuest,
   completeQuest,
 } from "../controllers/questController";
 import { protect } from "../middleware/authMiddleware";
@@ -13,6 +14,7 @@ router.use(protect);
 router.get("/today", getTodayQuest);
 router.get("/history", getQuestHistory);
 router.get("/active", getActiveQuests);
+router.post("/start", startQuest);
 router.post("/complete", completeQuest);
 
 export default router;

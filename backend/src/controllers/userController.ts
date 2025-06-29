@@ -134,7 +134,7 @@ const getUserProfile = async (req: IAuthRequest, res: Response) => {
           _id: user._id,
           name: user.name,
           email: user.email,
-          username: user.username,
+          createdAt: user.createdAt,
         },
         message: "User profile retrieved successfully",
       });

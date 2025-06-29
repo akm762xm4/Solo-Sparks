@@ -28,6 +28,7 @@ import {
 import {
   useGetTodayQuestQuery,
   useGetQuestHistoryQuery,
+  useStartQuestMutation,
   useCompleteQuestMutation,
   useGetActiveQuestsQuery,
   type Quest,
@@ -39,6 +40,7 @@ import {
   getDifficultyColors,
 } from "../utils/questUtils";
 import { DropdownFilter } from "./ReflectionsPage";
+import { toast } from "sonner";
 
 const categoryIcons = {
   emotional: Heart,
@@ -62,6 +64,7 @@ export const QuestsPage = () => {
     useGetQuestHistoryQuery();
   const { data: activeQuests = [], isLoading: isLoadingActive } =
     useGetActiveQuestsQuery();
+  const [startQuest, { isLoading: isStarting }] = useStartQuestMutation();
   const [completeQuest, { isLoading: isCompleting }] =
     useCompleteQuestMutation();
 
@@ -115,9 +118,36 @@ export const QuestsPage = () => {
     return categoryMatch && statusMatch;
   });
 
-  const handleStartQuest = (quest: Quest) => {
-    // This could open a reflection form or mark quest as started
-    console.log("Starting quest:", quest.id);
+  const handleStartQuest = async (quest: Quest) => {
+    try {
+      // Validate quest can be started
+      if (quest.status === "locked") {
+        toast.warning("🔒 Quest Locked", {
+          description: "Complete prerequisite quests first",
+        });
+        return;
+      }
+
+      if (quest.status === "active") {
+        toast.info("⏳ Already in Progress", {
+          description: "This quest is already active",
+        });
+        return;
+      }
+
+      // Call backend to start quest
+      await startQuest({ questId: quest.id }).unwrap();
+
+      // Show success message
+      toast.success("🚀 Quest Launched!", {
+        description: `"${quest.title}" is now active. Good luck!`,
+      });
+    } catch (error) {
+      console.error("Failed to start quest:", error);
+      toast.error("❌ Failed to Start Quest", {
+        description: "Please try again or contact support",
+      });
+    }
   };
 
   const handleCompleteQuest = (quest: Quest) => {
@@ -135,6 +165,7 @@ export const QuestsPage = () => {
       }).unwrap();
 
       setShowCompleteModal(false);
+      toast.success("Quest completed successfully!");
       setSelectedQuest(null);
       setReflectionText("");
     } catch (error) {
@@ -419,17 +450,27 @@ export const QuestsPage = () => {
                               color="primary"
                               className="px-4 py-2 text-sm"
                               onClick={() => handleStartQuest(quest)}
+                              disabled={isStarting}
                             >
-                              <Play className="w-4 h-4 mr-1" />
-                              Start
+                              {isStarting ? (
+                                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-1" />
+                              ) : (
+                                <Play className="w-4 h-4 mr-1" />
+                              )}
+                              {isStarting ? "Starting..." : "Start"}
                             </NeonGlowButton>
                             <NeonGlowButton
                               color="accent"
                               className="px-4 py-2 text-sm"
                               onClick={() => handleCompleteQuest(quest)}
+                              disabled={isCompleting}
                             >
-                              <CheckCircle className="w-4 h-4 mr-1" />
-                              Complete
+                              {isCompleting ? (
+                                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-1" />
+                              ) : (
+                                <CheckCircle className="w-4 h-4 mr-1" />
+                              )}
+                              {isCompleting ? "Completing..." : "Complete"}
                             </NeonGlowButton>
                           </>
                         )}

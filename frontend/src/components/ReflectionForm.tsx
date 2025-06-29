@@ -11,9 +11,8 @@ import {
   UploadCloud,
   Send,
   FileAudio,
-  CheckCircle,
-  XCircle,
 } from "lucide-react";
+import { toast } from "sonner";
 
 interface ReflectionFormProps {
   questTitle: string;
@@ -33,10 +32,6 @@ export const ReflectionForm = ({
   const [isRecording, setIsRecording] = useState(false);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const [submitReflection, { isLoading }] = useSubmitReflectionMutation();
-  const [toast, setToast] = useState<{
-    type: "success" | "error";
-    message: string;
-  } | null>(null);
   const imageInputRef = useRef<HTMLInputElement>(null);
   const audioInputRef = useRef<HTMLInputElement>(null);
 
@@ -92,42 +87,19 @@ export const ReflectionForm = ({
     if (audio) formData.append("audio", audio);
     try {
       await submitReflection(formData).unwrap();
-      setToast({ type: "success", message: "Reflection submitted!" });
+      toast.success("Reflection submitted successfully!");
       setText("");
       setImage(null);
       setAudio(null);
       setAudioUrl(null);
       if (onSubmitted) onSubmitted();
     } catch (err: any) {
-      setToast({
-        type: "error",
-        message: err?.data?.message || "Submission failed.",
-      });
+      toast.error(err?.data?.message || "Submission failed.");
     }
-    setTimeout(() => setToast(null), 3000);
   };
 
   return (
     <GlassCard borderColor="primary" className="max-w-xl mx-auto mt-8">
-      {/* Toast Notification */}
-      {toast && (
-        <div
-          className={`fixed left-1/2 top-8 z-50 -translate-x-1/2 px-6 py-3 rounded-xl flex items-center gap-2 shadow-neon-blue
-            ${
-              toast.type === "success"
-                ? "bg-accent-500/90 text-white"
-                : "bg-red-500/90 text-white"
-            }
-            glass-card border-2 border-white/10 backdrop-blur-md animate-float`}
-        >
-          {toast.type === "success" ? (
-            <CheckCircle className="w-5 h-5 text-white" />
-          ) : (
-            <XCircle className="w-5 h-5 text-white" />
-          )}
-          <span className="font-medium">{toast.message}</span>
-        </div>
-      )}
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Reflection Text */}
         <div>

@@ -1,11 +1,8 @@
 export interface User {
   _id: string;
   name: string;
-  username: string;
   email: string;
-  avatar?: string;
   createdAt: string;
-  updatedAt: string;
 }
 
 export interface LoginCredentials {
@@ -35,4 +32,9 @@ export interface ApiResponse<T> {
   data: T;
   message?: string;
   token?: string;
+}
+
+export interface UpdateSchema {
+  name: string;
+  password: string;
 }

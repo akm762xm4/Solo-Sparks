@@ -27,6 +27,7 @@ import {
 } from "lucide-react";
 import { DropdownFilter } from "./ReflectionsPage";
 import { Link } from "react-router-dom";
+import { toast } from "sonner";
 
 type RewardCategory =
   | "all"
@@ -123,6 +124,7 @@ export const RewardsPage = () => {
         type: "success",
       });
       setShowRedeemModal(false);
+      toast.success("Reward redeemed successfully!");
       setSelectedReward(null);
 
       // Clear message after 5 seconds

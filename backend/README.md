@@ -201,7 +201,6 @@ backend/
 │   ├── utils/           # Utility functions
 │   │   └── generateToken.ts
 │   └── index.ts         # Main application file
-├── uploads/             # Temporary file storage
 ├── seed.ts              # Database seeding script
 ├── package.json
 └── tsconfig.json

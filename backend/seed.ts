@@ -42,7 +42,6 @@ async function seed() {
       sparkPoints: 120,
       questsAssigned: 10,
       questsCompleted: 8,
-      username: "alice",
     },
     {
       name: "Bob",
@@ -51,7 +50,6 @@ async function seed() {
       sparkPoints: 80,
       questsAssigned: 7,
       questsCompleted: 5,
-      username: "bob",
     },
     {
       name: "Charlie",
@@ -60,7 +58,6 @@ async function seed() {
       sparkPoints: 200,
       questsAssigned: 15,
       questsCompleted: 15,
-      username: "charlie",
     },
     {
       name: "Diana",
@@ -69,7 +66,6 @@ async function seed() {
       sparkPoints: 60,
       questsAssigned: 5,
       questsCompleted: 3,
-      username: "diana",
     },
     {
       name: "Eve",
@@ -78,7 +74,6 @@ async function seed() {
       sparkPoints: 30,
       questsAssigned: 3,
       questsCompleted: 1,
-      username: "eve",
     },
   ]);
 
@@ -91,7 +86,6 @@ async function seed() {
       sparkPoints: 150,
       questsAssigned: 12,
       questsCompleted: 10,
-      username: "fiona",
     },
     {
       name: "George",
@@ -100,7 +94,6 @@ async function seed() {
       sparkPoints: 95,
       questsAssigned: 8,
       questsCompleted: 6,
-      username: "george",
     },
     {
       name: "Hannah",
@@ -109,7 +102,6 @@ async function seed() {
       sparkPoints: 180,
       questsAssigned: 14,
       questsCompleted: 13,
-      username: "hannah",
     },
   ]);
   users.push(...moreUsers);

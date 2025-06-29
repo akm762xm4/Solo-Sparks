@@ -3,7 +3,7 @@ import Reflection from "../models/reflectionModel";
 import User from "../models/userModel";
 import UserProfile from "../models/userProfileModel";
 import { IAuthRequest } from "../middleware/authMiddleware";
-import { uploadToCloudinary } from "../services/cloudinaryService";
+import { uploadImage, uploadAudio } from "../services/cloudinaryService";
 
 function calculatePoints(
   questType: string,
@@ -41,17 +41,11 @@ export const createReflection = async (req: IAuthRequest, res: Response) => {
     if (req.files) {
       const files = req.files as { [fieldname: string]: Express.Multer.File[] };
       if (files.image && files.image[0]) {
-        const imageResult = await uploadToCloudinary(
-          files.image[0].path,
-          "image"
-        );
+        const imageResult = await uploadImage(files.image[0]);
         imageUrl = imageResult.secure_url;
       }
       if (files.audio && files.audio[0]) {
-        const audioResult = await uploadToCloudinary(
-          files.audio[0].path,
-          "audio"
-        );
+        const audioResult = await uploadAudio(files.audio[0]);
         audioUrl = audioResult.secure_url;
       }
     }

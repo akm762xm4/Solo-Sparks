@@ -7,6 +7,7 @@ import {
   Mail,
   Lock,
   LayoutDashboard,
+  Calendar,
 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { GlassCard } from "../components/ui/GlassCard";
@@ -14,6 +15,7 @@ import { NeonGlowButton } from "../components/ui/NeonGlowButton";
 import { useTheme } from "../ThemeContext";
 import { Modal } from "../components/ui/Modal";
 import { useAuth } from "../hooks/useAuth";
+import { toast } from "sonner";
 
 export const SettingsPage = () => {
   const { theme, setTheme } = useTheme();
@@ -22,12 +24,6 @@ export const SettingsPage = () => {
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   const { logout } = useAuth();
   const navigate = useNavigate();
-
-  // Split account info and security
-  const [security, setSecurity] = useState({
-    name: user?.name,
-    password: "",
-  });
 
   return (
     <div className="min-h-screen dark:bg-background-900 bg-white text-black dark:text-white p-4 lg:p-6 transition-colors duration-300">
@@ -70,7 +66,10 @@ export const SettingsPage = () => {
               className={`flex-1 ${
                 theme === "dark" ? "ring-2 ring-primary-500" : ""
               }`}
-              onClick={() => setTheme("dark")}
+              onClick={() => {
+                setTheme("dark");
+                theme === "light" && toast.success("Theme changed to dark");
+              }}
             >
               <Moon className="w-4 h-4 mr-2" /> Dark
             </NeonGlowButton>
@@ -79,7 +78,10 @@ export const SettingsPage = () => {
               className={`flex-1 ${
                 theme === "light" ? "ring-2 ring-yellow-400" : ""
               }`}
-              onClick={() => setTheme("light")}
+              onClick={() => {
+                setTheme("light");
+                theme === "dark" && toast.success("Theme changed to light");
+              }}
             >
               <Sun className="w-4 h-4 mr-2" /> Light
             </NeonGlowButton>
@@ -112,23 +114,23 @@ export const SettingsPage = () => {
             </div>
             <div>
               <label className="block mb-1 text-black dark:text-white">
-                Username
+                Name
               </label>
               <div className="flex items-center gap-2">
                 <User className="w-4 h-4 text-secondary-500" />
                 <input
                   type="text"
-                  value={user?.username}
+                  value={user?.name}
                   readOnly
                   className="input-field bg-gray-100 dark:bg-background-700 cursor-not-allowed"
-                  autoComplete="username"
+                  autoComplete="name"
                 />
               </div>
             </div>
           </div>
         </GlassCard>
 
-        {/* Account Security (editable) */}
+        {/* Account Security */}
         <GlassCard className="p-6">
           <h2 className="heading-3 mb-4 flex items-center gap-2 text-black dark:text-white text-xl md:text-3xl">
             <Lock className="w-5 h-5 text-primary-500 " />
@@ -137,42 +139,18 @@ export const SettingsPage = () => {
           <form className="space-y-4">
             <div>
               <label className="block mb-1 text-black dark:text-white">
-                Name
+                Member Since
               </label>
               <div className="flex items-center gap-2">
-                <User className="w-4 h-4 text-primary-500" />
-                <input
-                  type="text"
-                  value={user?.name}
-                  onChange={(e) =>
-                    setSecurity((s) => ({ ...s, name: e.target.value }))
-                  }
-                  className="input-field"
-                  autoComplete="name"
-                />
+                <Calendar className="w-4 h-4 text-primary-500" />
+                <div className="input-field bg-gray-100 dark:bg-background-700 cursor-not-allowed text-sm">
+                  {new Date(user?.createdAt || "").toLocaleString("en-US", {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                  })}
+                </div>
               </div>
-            </div>
-            <div>
-              <label className="block mb-1 text-black dark:text-white">
-                Change Password
-              </label>
-              <div className="flex items-center gap-2">
-                <Lock className="w-4 h-4 text-primary-500" />
-                <input
-                  type="password"
-                  value={security.password}
-                  onChange={(e) =>
-                    setSecurity((s) => ({ ...s, password: e.target.value }))
-                  }
-                  className="input-field"
-                  autoComplete="new-password"
-                />
-              </div>
-            </div>
-            <div className="flex justify-end">
-              <NeonGlowButton color="primary" type="submit">
-                Save Changes
-              </NeonGlowButton>
             </div>
           </form>
         </GlassCard>
@@ -200,6 +178,7 @@ export const SettingsPage = () => {
               await logout();
               setShowLogoutModal(false);
               navigate("/login");
+              toast.success("Logged out successfully");
             }}
           >
             Log Out
