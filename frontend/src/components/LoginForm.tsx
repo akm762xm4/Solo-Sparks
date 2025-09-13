@@ -115,6 +115,16 @@ export const LoginForm = ({ onSubmit, isLoading = false }: LoginFormProps) => {
           )}
           {isLoading ? "Signing in..." : "Sign in"}
         </button>
+        
+        <div className="mt-4">
+          <button
+            type="button"
+            onClick={() => onSubmit({ email: "diana@example.com", password: "Password123!" })}
+            className="w-full py-2 px-4 border border-indigo-300 dark:border-indigo-700 text-sm font-medium rounded-md text-indigo-700 dark:text-indigo-300 bg-white dark:bg-background-800 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all flex items-center justify-center"
+          >
+            Demo Login
+          </button>
+        </div>
       </form>
     </div>
   );

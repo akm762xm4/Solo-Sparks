@@ -10,6 +10,7 @@ import {
   Menu as MenuIcon,
   X as CloseIcon,
   ArrowLeft,
+  Gift,
 } from "lucide-react";
 
 const menu = [
@@ -18,6 +19,7 @@ const menu = [
   { label: "Reflections", icon: BookOpen, to: "/reflections" },
   { label: "Profile", icon: User, to: "/personality" },
   { label: "Analytics", icon: BarChart3, to: "/analytics" },
+  { label: "Rewards", icon: Gift, to: "/rewards" },
   { label: "Settings", icon: SettingsIcon, to: "/settings" },
 ];
 
