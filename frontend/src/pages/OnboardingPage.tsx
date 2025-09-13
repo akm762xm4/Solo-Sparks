@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { OnboardingLayout } from "../components/onboarding/OnboardingLayout";
 import { MoodStep } from "../components/onboarding/MoodStep";
@@ -49,6 +49,13 @@ export const OnboardingPage = () => {
   const [updateStep, { isLoading: isUpdating }] =
     useUpdateProfileStepMutation();
   const [skipStep, { isLoading: isSkipping }] = useSkipProfileStepMutation();
+  
+  // Redirect to dashboard if onboarding is already complete
+  useEffect(() => {
+    if (profileData?.data?.isOnboardingComplete) {
+      navigate('/dashboard', { replace: true });
+    }
+  }, [profileData, navigate]);
 
   const handleNext = async (stepData: any) => {
     try {

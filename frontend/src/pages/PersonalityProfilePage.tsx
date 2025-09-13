@@ -254,7 +254,7 @@ export const PersonalityProfilePage = () => {
           <NeonGlowButton
             color="primary"
             className="mt-4 lg:mt-0 flex py-5 items-center"
-            onClick={() => navigate("/onboarding")}
+            onClick={() => navigate("/personality/edit")}
           >
             <Edit className="w-6 h-6 mr-2" />
             Edit Personality Profile

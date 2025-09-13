@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import type { FetchArgs } from "@reduxjs/toolkit/query";
+import type { FetchArgs, FetchBaseQueryError } from "@reduxjs/toolkit/query";
 import { useAuthStore } from "../store/authStore";
 
 // const baseUrl = "http://localhost:3000/api";
@@ -32,10 +32,23 @@ const customBaseQuery = async (
 
   const headers = baseHeaders;
 
-  return fetchBaseQuery({
+  const result = await fetchBaseQuery({
     baseUrl: baseUrl,
     credentials: "include",
   })({ ...args, headers }, api, extraOptions);
+  
+  // Handle 401 Unauthorized errors
+  if (result.error && (result.error as FetchBaseQueryError).status === 401) {
+    // Clear auth state
+    useAuthStore.getState().logout();
+    
+    // Redirect to auth page
+    if (typeof window !== 'undefined') {
+      window.location.href = '/auth';
+    }
+  }
+  
+  return result;
 };
 
 export const api = createApi({
